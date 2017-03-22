@@ -31,3 +31,4 @@ logs/
 .Trashes
 ebs.db
 Thumbs.db
+*.pyc

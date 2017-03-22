@@ -2,6 +2,6 @@ python:
     build: .
     ports:
         - 5000:5000
-    command: python /app/app.py
+    command: python /app/run.py
     volumes:
-        - ./app:/app
+        - .:/app
