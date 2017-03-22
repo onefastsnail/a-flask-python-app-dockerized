@@ -1,7 +1,22 @@
+mysql:
+    image: mariadb:latest
+    container_name: mysql
+    ports:
+        - 3306:3306
+    volumes:
+        - ./data/mariadb:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: pass
+        MYSQL_DATABASE: app
+        MYSQL_USER: onefastpython
+        MYSQL_PASSWORD: pass
+
 python:
     build: .
     ports:
         - 5000:5000
     command: python /app/run.py
+    links:
+        - mysql
     volumes:
         - .:/app

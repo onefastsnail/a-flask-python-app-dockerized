@@ -32,3 +32,6 @@ logs/
 ebs.db
 Thumbs.db
 *.pyc
+
+#our persistent docker data
+/data

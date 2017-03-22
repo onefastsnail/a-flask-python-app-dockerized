@@ -1,3 +1,5 @@
+#all our routes go here
+
 from flask import render_template
 from datetime import datetime
 
