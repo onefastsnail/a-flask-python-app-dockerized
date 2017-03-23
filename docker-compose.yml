@@ -20,3 +20,7 @@ python:
         - mysql
     volumes:
         - .:/app
+    restart: always
+    environment:
+      FLASK_CONFIG: development
+      FLASK_APP: run.py
