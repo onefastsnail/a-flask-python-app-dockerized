@@ -3,11 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask.json import jsonify
+from flask import Response
+from flask import json
 import MySQLdb
 
 # Import classes from your brand new package
 from Bikes import Mtb
 from Bikes import Bmx
+import Posts
 
 # local imports
 from config import app_config
@@ -26,6 +29,7 @@ def create_app(config_name):
 
     from app import models
 
+    #using python decorators to extend functions without modifing them
     @app.route('/')
     def hello_world():
 
@@ -46,6 +50,41 @@ def create_app(config_name):
 
     	return data
 
+    @app.errorhandler(404)
+    def not_found(error=None):
+        message = {
+                'status': 404,
+                'message': 'Not Found Amigo',
+        }
+        resp = jsonify(message)
+        resp.status_code = 404
+
+        return resp
+
+    @app.route('/users/<userid>', methods = ['GET'])
+    def api_users(userid):
+        users = {'1':'john', '2':'steve', '3':'bill'}
+
+        if userid in users:
+            return jsonify({userid:users[userid]})
+        else:
+            return not_found()
+
+    @app.route('/hello', methods = ['GET'])
+    def api_hello():
+        data = {
+            'hello'  : 'world',
+            'number' : 3
+        }
+
+        #Serialize obj to a JSON format #https://docs.python.org/2/library/json.html
+        myjson = json.dumps(data)
+
+        resp = Response(myjson, status=200, mimetype='application/json')
+        resp.headers['Link'] = 'http://www.onefastsnail.com'
+
+        return resp
+
     @app.route('/bikes')
     def bikes():
 
@@ -58,5 +97,12 @@ def create_app(config_name):
     	merge.sort()
 
     	return jsonify(merge)
+
+    @app.route('/posts')
+    def posts():
+
+    	posts = Posts.getposts()
+
+    	return jsonify(posts)
 
     return app
